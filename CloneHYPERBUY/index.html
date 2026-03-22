@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HyperBuy – Mua Sắm Thông Minh</title>
+  <meta name="description" content="HyperBuy – Hàng ngàn sản phẩm chất lượng, giá tốt, giao hàng nhanh toàn quốc." />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=1774151277017" />
+  <style>
+    /* ==============================================================
+       HYPERBUY-MODERN LAYOUT OVERRIDE FOR HOMEPAGE
+       ============================================================== */
+    body {
+      background: #f3f4f6;
+    }
+
+    /* ----- CP HEADER ----- */
+    .cp-header {
+      background: #4f46e5;
+      /* CellphoneS Red */
+      color: #fff;
+      padding: 10px 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .cp-header-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      gap: 15px;
+      padding: 0 10px;
+    }
+
+    .cp-logo {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #fff !important;
+      text-transform: uppercase;
+      letter-spacing: -0.5px;
+      text-decoration: none;
+    }
+
+    .cp-search {
+      flex: 1;
+      max-width: 400px;
+      position: relative;
+    }
+
+    .cp-search input {
+      width: 100%;
+      padding: 10px 15px 10px 40px;
+      border-radius: 10px;
+      border: none;
+      font-size: 0.9rem;
+      color: #333;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+      outline: none;
+    }
+
+    .cp-search i {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #666;
+    }
+
+    .cp-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .cp-action-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.2s;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 8px 12px;
+      border-radius: 8px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .cp-action-item:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .cp-action-item i {
+      font-size: 1.2rem;
+    }
+
+    .cp-action-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+
+    .cp-action-text span:first-child {
+      font-size: 0.7rem;
+      opacity: 0.9;
+    }
+
+    /* Dummy block for main-nav for JS compatibility */
+    #main-nav {
+      display: none;
+    }
+
+    /* Responsive header */
+    .nav-toggle {
+      display: none;
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    @media (max-width: 992px) {
+      .cp-action-text {
+        display: none;
+      }
+
+      .cp-action-item {
+        padding: 8px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .cp-header-container {
+        flex-wrap: wrap;
+      }
+
+      .cp-search {
+        order: 3;
+        min-width: 100%;
+        margin-top: 10px;
+        max-width: 100%;
+      }
+
+      .nav-toggle {
+        display: block;
+      }
+    }
+
+    /* ----- CP MAIN CONTAINER ----- */
+    .cp-main {
+      width: 100%;
+      max-width: 1200px;
+      margin: 15px auto;
+      padding: 0 10px;
+    }
+
+    /* ----- CP HERO SECTION ----- */
+    .cp-hero {
+      display: grid;
+      grid-template-columns: 220px 1fr 265px;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 1024px) {
+      .cp-hero {
+        grid-template-columns: 200px 1fr;
+      }
+
+      .cp-right-banners {
+        display: none !important;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .cp-hero {
+        grid-template-columns: 1fr;
+      }
+
+      .cp-sidebar {
+        display: none !important;
+      }
+    }
+
+    /* Sidebar Menu */
+    .cp-sidebar {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+      padding: 8px 0;
+      height: 380px;
+      overflow-y: auto;
+    }
+
+    .cp-sidebar::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .cp-sidebar::-webkit-scrollbar-thumb {
+      background: #ddd;
+      border-radius: 4px;
+    }
+
+    /* Overriding right-category-list styles */
+    #right-category-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    #right-category-list li a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 15px;
+      color: #343a40;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+
+    #right-category-list li a:hover {
+      background: #f8f9fa;
+      color: #4f46e5;
+    }
+
+    #right-category-list li a::after {
+      content: '\f105';
+      /* FontAwesome right angle */
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+      opacity: 0.5;
+    }
+
+    /* Slider */
+    .cp-slider {
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+      position: relative;
+      height: 380px;
+    }
+
+    .slider-track {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .slide {
+      min-width: 100%;
+      height: 100%;
+      display: block;
+      overflow: hidden;
+    }
+
+    .slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      pointer-events: none;
+    }
+
+    .slider-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.35);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 1.8rem;
+      line-height: 38px;
+      text-align: center;
+      cursor: pointer;
+      z-index: 10;
+      transition: background 0.2s;
+      padding: 0;
+    }
+
+    .slider-btn:hover {
+      background: rgba(215, 0, 24, 0.8);
+    }
+
+    .slider-prev {
+      left: 10px;
+    }
+
+    .slider-next {
+      right: 10px;
+    }
+
+    .slider-dots {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 7px;
+    }
+
+    .slider-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.55);
+      cursor: pointer;
+      transition: background 0.25s, transform 0.25s;
+      border: none;
+    }
+
+    .slider-dot.active {
+      background: #fff;
+      transform: scale(1.4);
+    }
+
+    /* Right Banners */
+    .cp-right-banners {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      height: 380px;
+    }
+
+    .cp-banner {
+      flex: 1;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .cp-banner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+
+    .cp-banner:hover img {
+      transform: scale(1.05);
+    }
+
+    /* ----- FLASH SALE BANNER ----- */
+    .cp-flash-sale-header {
+      background: linear-gradient(to right, #6366f1, #ff9f43);
+      border-radius: 10px 10px 0 0;
+      padding: 15px 20px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .cp-flash-sale-header h2 {
+      font-size: 1.5rem;
+      margin: 0;
+      font-style: italic;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .countdown {
+      display: flex;
+      gap: 5px;
+      font-weight: bold;
+      align-items: center;
+    }
+
+    .countdown span {
+      background: #333;
+      color: #fff;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.95rem;
+    }
+
+    /* ----- CP PRODUCT GRID SECTION ----- */
+    .cp-section {
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 25px;
+      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .cp-section-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #343a40;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cp-section-title a {
+      font-size: 0.9rem;
+      color: #007bff;
+      text-transform: none;
+      font-weight: 500;
+      text-decoration: none;
+    }
+
+    /* Overriding dynamically rendered products */
+    .product-grid-enhanced {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr) !important;
+      gap: 12px !important;
+    }
+
+    @media (max-width: 1200px) {
+      .product-grid-enhanced {
+        grid-template-columns: repeat(4, 1fr) !important;
+      }
+    }
+
+    @media (max-width: 992px) {
+      .product-grid-enhanced {
+        grid-template-columns: repeat(3, 1fr) !important;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .product-grid-enhanced {
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
+    }
+
+    /* Custom Product Card overrides for Cellphones style */
+    .product-card-v2 {
+      height: 100% !important;
+      border: 1px solid #f1f1f1 !important;
+      border-radius: 10px !important;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02) !important;
+      background: #fff !important;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: visible !important;
+      /* Allow badge to pop */
+    }
+
+    .product-card-v2:hover {
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12) !important;
+      transform: translateY(-4px) !important;
+      border-color: #a5b4fc !important;
+      /* light red border */
+    }
+
+    .product-card-v2 .img-wrap {
+      background: transparent !important;
+      border-radius: 4px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .product-card-v2 img {
+      height: 160px !important;
+      width: auto !important;
+      max-width: 100% !important;
+      display: inline-block;
+      object-fit: contain !important;
+      transition: transform 0.3s;
+    }
+
+    .product-card-v2:hover img {
+      transform: scale(1.08) !important;
+    }
+
+    .product-card-v2 .card-body {
+      padding: 0 !important;
+
+      display: flex !important;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .product-card-v2 .card-title {
+      font-size: 0.88rem !important;
+      font-weight: 600 !important;
+      color: #444 !important;
+      margin-bottom: 8px;
+
+      flex-grow: 1;
+
+      flex-grow: 1;
+    }
+
+    .product-card-v2 .card-price {
+      color: #4f46e5 !important;
+      /* Red price */
+      font-size: 1.15rem !important;
+      font-weight: 700 !important;
+    }
+
+    /* Adds the "Smember" tag mock */
+    .product-card-v2 .card-price::after {
+      content: 'Smember giảm thêm';
+      display: block;
+      font-size: 0.65rem;
+      color: #fff;
+      background: #4f46e5;
+      border-radius: 4px;
+      padding: 2px 6px;
+      width: fit-content;
+      margin-top: 5px;
+      font-weight: 500;
+      letter-spacing: 0.2px;
+    }
+
+    .product-card-v2 .btn-add {
+      display: none !important;
+      /* Hide big add to cart */
+    }
+
+    .product-card-v2 .card-footer {
+      padding: 0 !important;
+      margin-top: 12px !important;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Add rating mock */
+    .product-card-v2 .card-footer::before {
+      content: '★★★★★';
+      color: #f59e0b;
+      font-size: 0.8rem;
+    }
+
+    .product-card-v2 .card-footer::after {
+      display: none !important;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Hidden dummy items to satisfy main.js DOM bindings -->
+  <ul id="main-nav">
+    <li><a href="index.html" id="nav-home">Home</a></li>
+    <li><a href="products.html" id="nav-products">Products</a></li>
+    <li id="nav-profile" style="display:none;"><a href="profile.html">Profile</a></li>
+    <li id="nav-admin-dashboard-li" style="display:none;"><a href="admin.html">Admin</a></li>
+    <li id="nav-login"><a href="login.html">Login</a></li>
+    <li id="nav-register"><a href="register.html">Register</a></li>
+    <li id="nav-logout" style="display:none;"><a href="#">Logout</a></li>
+  </ul>
+
+  <!-- ----- CELLPHONES INSPIRED HEADER ----- -->
+  <header class="cp-header">
+    <div class="cp-header-container">
+      <button class="nav-toggle" id="nav-toggle"><i class="fas fa-bars"></i></button>
+
+      <a href="index.html" class="cp-logo">HYPERBUY</a>
+
+      <form class="cp-search" action="products.html" method="GET" style="display:flex; position:relative; width:100%;">
+        <button type="submit"
+          style="background:transparent; border:none; position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#666; cursor:pointer; padding:0; z-index:10;">
+          <i class="fas fa-search" style="position:static; transform:none;"></i>
+        </button>
+        <input type="text" name="name" placeholder="Bạn cần tìm gì hôm nay?"
+          style="width:100%; padding:10px 15px 10px 40px; border-radius:10px; border:none; font-size:0.9rem; color:#333; box-shadow:inset 0 1px 3px rgba(0,0,0,0.1); outline:none;" />
+      </form>
+
+      <div class="cp-header-actions">
+        <a href="tel:19001234" class="cp-action-item" style="background: transparent;">
+          <i class="fas fa-phone-volume"></i>
+          <div class="cp-action-text"><span>Gọi mua hàng</span><span>1900.1234</span></div>
+        </a>
+        <a href="#" class="cp-action-item">
+          <i class="fas fa-map-marked-alt"></i>
+          <div class="cp-action-text"><span>Cửa hàng</span><span>gần bạn</span></div>
+        </a>
+        <a href="my-orders.html" class="cp-action-item" id="nav-my-orders">
+          <i class="fas fa-shipping-fast"></i>
+          <div class="cp-action-text"><span>Tra cứu</span><span>đơn hàng</span></div>
+        </a>
+
+        <a href="wishlist.html" class="cp-action-item" style="position:relative;">
+          <i class="fas fa-heart"></i>
+          <div class="cp-action-text"><span>Yêu</span><span>thích</span></div>
+          <span class="wishlist-count-badge"
+            style="position:absolute; top:-6px; right:-6px; background:#fff; color:#4f46e5; display:none; border-radius:10px; padding:2px 6px; font-weight:700; font-size:0.75rem;"></span>
+        </a>
+        <a href="cart.html" class="cp-action-item" id="nav-cart-link-li" style="position:relative;">
+          <i class="fas fa-shopping-bag"></i>
+          <div class="cp-action-text"><span>Giỏ</span><span>hàng</span></div>
+          <span class="cart-item-count-nav"
+            style="position:absolute; top:-6px; right:-6px; background:#fff; color:#4f46e5; display:none; border-radius:10px; padding:2px 6px; font-weight:700; font-size:0.75rem;"></span>
+        </a>
+
+        <!-- JS Dynamic Auth Button -->
+        <a href="login.html" class="cp-action-item" id="cp-auth-btn">
+          <i class="fas fa-user-circle"></i>
+          <div class="cp-action-text"><span id="cp-auth-l1">Đăng</span><span id="cp-auth-l2">nhập</span></div>
+        </a>
+
+        <!-- Admin Back Button (shown only for ADMIN role) -->
+        <a href="admin.html" class="cp-action-item" id="cp-admin-back-btn" style="display:none;">
+          <i class="fas fa-cogs"></i>
+          <div class="cp-action-text"><span>Quay về</span><span>Quản Trị</span></div>
+        </a>
+
+        <!-- Notification Dropdown -->
+        <div id="nav-notification-bell" style="display:none; position:relative;">
+          <a href="#" id="notification-bell-link" class="cp-action-item" style="padding-left:0;">
+            <i class="fas fa-bell"></i>
+            <span id="notification-count" class="notification-badge" style="display:none;"></span>
+          </a>
+          <div id="notification-dropdown" class="notification-list-dropdown"
+            style="position:absolute; right:0; top:40px; background:#fff; color:#333; width:300px; border-radius:10px; box-shadow:0 4px 15px rgba(0,0,0,0.1); display:none;">
+            <ul id="notification-list-items"
+              style="list-style:none; padding:10px; margin:0; max-height:300px; overflow-y:auto;"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="cp-main">
+
+    <!-- ----- HERO ----- -->
+    <div class="cp-hero">
+      <aside class="cp-sidebar">
+        <!-- JS fills this, but here is the dummy setup -->
+        <ul id="right-category-list">
+          <!-- Fallback items -->
+          <li><a href="#"><i class="fas fa-mobile-alt" style="width:20px; text-align:center;"></i> Điện thoại</a></li>
+          <li><a href="#"><i class="fas fa-laptop" style="width:20px; text-align:center;"></i> Laptop</a></li>
+          <li><a href="#"><i class="fas fa-tablet-alt" style="width:20px; text-align:center;"></i> Tablet</a></li>
+          <li><a href="#"><i class="fas fa-headphones-alt" style="width:20px; text-align:center;"></i> Âm thanh</a></li>
+          <li><a href="#"><i class="fas fa-tv" style="width:20px; text-align:center;"></i> Tivi, Smart Home</a></li>
+          <li><a href="#"><i class="fas fa-gamepad" style="width:20px; text-align:center;"></i> Minigame</a></li>
+        </ul>
+      </aside>
+
+      <!-- ===== BANNER SLIDER ===== -->
+      <div class="cp-slider" id="hero-slider">
+        <div class="slider-track" id="slider-track">
+          <a class="slide" href="products.html">
+            <img
+              src="https://cdn2.cellphones.com.vn/insecure/rs:fill:1036:450/q:100/plain/https://dashboard.cellphones.com.vn/storage/690x300_PocoX8ProMax.jpg"
+              alt="POCO X8 Pro Max">
+          </a>
+          <a class="slide" href="products.html">
+            <img
+              src="https://cdn2.cellphones.com.vn/insecure/rs:fill:0:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/i/p/iphone-16-pro-max-6.png"
+              alt="iPhone 16 Pro Max">
+          </a>
+          <a class="slide" href="products.html">
+            <img
+              src="https://cdn2.cellphones.com.vn/insecure/rs:fill:0:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/s/a/samsung-galaxy-s26-ultra.jpg"
+              alt="Samsung Galaxy">
+          </a>
+          <a class="slide" href="products.html">
+            <img
+              src="https://cdn2.cellphones.com.vn/insecure/rs:fill:0:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/t/e/text_ng_n_7__6_2.png"
+              alt="MacBook 2026">
+          </a>
+        </div>
+        <button class="slider-btn slider-prev" onclick="slideBanner(-1)">&#8249;</button>
+        <button class="slider-btn slider-next" onclick="slideBanner(1)">&#8250;</button>
+        <div class="slider-dots" id="slider-dots"></div>
+      </div>
+
+      <div class="cp-right-banners">
+        <div class="cp-banner"><img
+            src="https://cdn2.cellphones.com.vn/insecure/rs:fill:690:300/q:50/plain/https://dashboard.cellphones.com.vn/storage/RightBanner-display.png"
+            alt="Promo Right 1"></div>
+        <div class="cp-banner"><img
+            src="https://cdn2.cellphones.com.vn/insecure/rs:fill:690:300/q:50/plain/https://dashboard.cellphones.com.vn/storage/a-17.png"
+            alt="Promo Right 2"></div>
+        <div class="cp-banner"><img
+            src="https://cdn2.cellphones.com.vn/insecure/rs:fill:690:300/q:50/plain/https://dashboard.cellphones.com.vn/storage/macbook-giao-xa-2026.png"
+            alt="Promo Right 3"></div>
+      </div>
+    </div>
+
+    <!-- ----- FLASH SALE ----- -->
+    <div class="cp-section" style="padding:0; background: #fff; border:2px solid #6366f1; overflow:hidden;">
+      <div class="cp-flash-sale-header">
+        <h2>⚡ FLASH SALE ONLINE</h2>
+        <div class="countdown">
+          <span>Kiểu gì cũng rẻ</span>
+          <span style="background: red;">Kết thúc trong:</span>
+          <span id="timer-h">02</span> : <span id="timer-m">45</span> : <span id="timer-s">11</span>
+        </div>
+      </div>
+      <div style="padding: 20px;">
+        <!-- Reusing the product-grid-home logic for the top block -->
+        <div id="product-grid-home" class="product-grid-enhanced">
+          <p style="color:#777; width:100%; text-align:center; padding: 20px;">Đang tải sản phẩm flash sale...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ----- RECOMMENDED ----- -->
+    <div class="cp-section">
+      <div class="cp-section-title">
+        <span>★ DÀNH CHO BẠN</span>
+        <a href="products.html">Xem tất cả <i class="fas fa-chevron-right"
+            style="font-size:0.8rem; margin-left:5px;"></i></a>
+      </div>
+      <!-- Reusing the guest-recommend-products block -->
+      <div id="guest-recommend-products" class="product-grid-enhanced">
+        <p style="color:#777; width:100%; text-align:center; padding: 20px;">Đang phân tích thói quen mua sắm...</p>
+      </div>
+    </div>
+
+  </div> <!-- /.cp-main -->
+
+  <!-- ----- FOOTER ----- -->
+  <footer style="background: #fff; padding: 40px 0 20px; border-top: 1px solid #e5e7eb; color: #4b5563;">
+    <div class="cp-main" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px;">
+      <div>
+        <h4 style="font-size: 1.05rem; font-weight:700; color:#111; margin-bottom: 18px;">Tổng đài hỗ trợ miễn phí</h4>
+        <p style="font-size: 0.9rem; margin-bottom: 8px;">Gọi mua hàng: <strong
+            style="color:#4f46e5;">1800.2097</strong> (7h30 - 22h00)</p>
+        <p style="font-size: 0.9rem; margin-bottom: 8px;">Gọi khiếu nại: <strong
+            style="color:#4f46e5;">1800.2063</strong> (8h00 - 21h30)</p>
+        <p style="font-size: 0.9rem; margin-bottom: 8px;">Gọi bảo hành: <strong
+            style="color:#4f46e5;">1800.2064</strong> (8h00 - 21h00)</p>
+      </div>
+      <div>
+        <h4 style="font-size: 1.05rem; font-weight:700; color:#111; margin-bottom: 18px;">Thông tin và chính sách</h4>
+        <p style="font-size: 0.9rem; margin-bottom: 8px;"><a href="#" style="color:#4b5563; text-decoration:none;">Mua
+            hàng và thanh toán Online</a></p>
+        <p style="font-size: 0.9rem; margin-bottom: 8px;"><a href="#" style="color:#4b5563; text-decoration:none;">Mua
+            hàng trả góp Online</a></p>
+        <p style="font-size: 0.9rem; margin-bottom: 8px;"><a href="#" style="color:#4b5563; text-decoration:none;">Chính
+            sách giao hàng</a></p>
+        <p style="font-size: 0.9rem; margin-bottom: 8px;"><a href="#" style="color:#4b5563; text-decoration:none;">Đổi
+            trả & Bảo hành</a></p>
+      </div>
+      <div>
+        <h4 style="font-size: 1.05rem; font-weight:700; color:#111; margin-bottom: 18px;">Dịch vụ và thông tin khác</h4>
+        <p style="font-size: 0.9rem; margin-bottom: 8px;"><a href="#" style="color:#4b5563; text-decoration:none;">Khách
+            hàng doanh nghiệp (B2B)</a></p>
+        <p style="font-size: 0.9rem; margin-bottom: 8px;"><a href="#" style="color:#4b5563; text-decoration:none;">Quy
+            chế hoạt động</a></p>
+        <p style="font-size: 0.9rem; margin-bottom: 8px;"><a href="#" style="color:#4b5563; text-decoration:none;">Chính
+            sách bảo mật</a></p>
+      </div>
+      <div>
+        <h4 style="font-size: 1.05rem; font-weight:700; color:#111; margin-bottom: 18px;">Kết nối với HyperBuy</h4>
+        <div style="font-size: 1.8rem; display: flex; gap: 15px; color: #4f46e5;">
+          <a href="#" style="color:#4f46e5;"><i class="fab fa-facebook"></i></a>
+          <a href="#" style="color:#4f46e5;"><i class="fab fa-youtube"></i></a>
+          <a href="#" style="color:#4f46e5;"><i class="fab fa-instagram"></i></a>
+          <a href="#" style="color:#4f46e5;"><i class="fab fa-tiktok"></i></a>
+        </div>
+        <div style="margin-top:20px;">
+          <h4 style="font-size: 1.05rem; font-weight:700; color:#111; margin-bottom: 10px;">Thanh toán miễn phí</h4>
+          <div style="display:flex; gap:10px;">
+            <i class="fab fa-cc-visa" style="font-size:2rem; color:#1434CB;"></i>
+            <i class="fab fa-cc-mastercard" style="font-size:2rem; color:#EB001B;"></i>
+            <i class="fab fa-cc-paypal" style="font-size:2rem; color:#003087;"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      style="text-align: center; margin-top: 40px; padding-top:20px; border-top:1px solid #eee; font-size: 0.85rem; color: #888;">
+      © <span id="current-year">2026</span> Công ty TNHH HyperBuy. Địa chỉ: Khu Công Nghệ Cao. Mọi quyền được bảo lưu.
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    // Essential initializations
+    document.addEventListener("DOMContentLoaded", async () => {
+      const token = localStorage.getItem("authToken");
+
+      // Handle Authentication UI toggle manually since we overwrote the default nav
+      const cpAuthBtn = document.getElementById('cp-auth-btn');
+      const cpAuthL1 = document.getElementById('cp-auth-l1');
+      const cpAuthL2 = document.getElementById('cp-auth-l2');
+      if (token && cpAuthBtn) {
+        cpAuthL1.innerText = 'Smember';
+        cpAuthL2.innerText = 'Tài khoản';
+        cpAuthBtn.href = window.location.pathname.includes('my-store') ? 'my-store.html' : 'profile.html';
+      }
+
+      // Load components using main.js logic
+      try {
+        if (typeof loadHomeRecommendations === 'function') await loadHomeRecommendations(10);
+        if (document.getElementById("product-grid-home") && typeof loadProducts === 'function') {
+          loadProducts("product-grid-home", { size: 10 });
+        }
+      } catch (e) {
+        console.warn('API error when loading products', e);
+      }
+
+      // Sidebar categories API loader override
+      const ul = document.getElementById("right-category-list");
+      try {
+        // Assume callApi is loaded from main.js
+        if (typeof callApi === 'function' && typeof PRODUCT_API_BASE_URL !== 'undefined') {
+          const result = await callApi(PRODUCT_API_BASE_URL, "/categories", "GET", null, !!token);
+          if (result && result.ok && Array.isArray(result.data)) {
+            ul.innerHTML = "";
+            let idx = 0;
+            const icons = ['fa-mobile-alt', 'fa-laptop', 'fa-tablet-alt', 'fa-headphones-alt', 'fa-tv', 'fa-watch', 'fa-keyboard', 'fa-mouse', 'fa-camera', 'fa-plug'];
+            result.data.forEach((c) => {
+              const li = document.createElement("li");
+              const iconClass = icons[idx % icons.length];
+              li.innerHTML = `<a href="products.html?category=${c.id}"><i class="fas ${iconClass}" style="width:22px; text-align:center; color:#555;"></i> ${c.name}</a>`;
+              ul.appendChild(li);
+              idx++;
+            });
+          }
+        }
+      } catch (err) {
+        console.warn("Could not load categories, keeping skeleton", err);
+      }
+
+      // Simple timer script for Flash sale
+      let h = 2, m = 45, s = 11;
+      const elH = document.getElementById("timer-h"), elM = document.getElementById("timer-m"), elS = document.getElementById("timer-s");
+      if (elH && elM && elS) {
+        setInterval(() => {
+          s--;
+          if (s < 0) { s = 59; m--; }
+          if (m < 0) { m = 59; h--; }
+          if (h < 0) { h = 0; m = 0; s = 0; }
+          elH.innerText = h < 10 ? "0" + h : h;
+          elM.innerText = m < 10 ? "0" + m : m;
+          elS.innerText = s < 10 ? "0" + s : s;
+        }, 1000);
+      }
+    });
+
+    // Auto-show admin back button if user is ADMIN
+    (function () {
+      try {
+        const role = localStorage.getItem('userRole') || '';
+        const token = localStorage.getItem('authToken');
+        if (token && (role === 'ADMIN' || role === 'admin')) {
+          const adminBtn = document.getElementById('cp-admin-back-btn');
+          if (adminBtn) adminBtn.style.display = 'flex';
+        }
+      } catch (e) { }
+    })();
+
+    // Handle notification bell toggle manually since legacy one hides
+    const bellLink = document.getElementById('notification-bell-link');
+    if (bellLink) {
+      bellLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        const drop = document.getElementById('notification-dropdown');
+        if (drop) drop.style.display = drop.style.display === 'none' ? 'block' : 'none';
+      });
+    }
+
+    // ===== BANNER SLIDER =====
+    (function () {
+      const track = document.getElementById('slider-track');
+      const dotsContainer = document.getElementById('slider-dots');
+      const sliderEl = document.getElementById('hero-slider');
+      let slides, current = 0, autoTimer;
+
+      function init() {
+        if (!track) return;
+        slides = Array.from(track.querySelectorAll('.slide'));
+        if (!slides.length) return;
+        if (dotsContainer) {
+          dotsContainer.innerHTML = '';
+          slides.forEach(function (_, i) {
+            var d = document.createElement('button');
+            d.className = 'slider-dot' + (i === 0 ? ' active' : '');
+            d.setAttribute('aria-label', 'Banner ' + (i + 1));
+            (function (idx) { d.onclick = function () { goTo(idx); resetTimer(); }; })(i);
+            dotsContainer.appendChild(d);
+          });
+        }
+        resetTimer();
+        if (sliderEl) {
+          sliderEl.addEventListener('mouseenter', function () { clearInterval(autoTimer); });
+          sliderEl.addEventListener('mouseleave', resetTimer);
+          var tx = 0;
+          sliderEl.addEventListener('touchstart', function (e) { tx = e.touches[0].clientX; }, { passive: true });
+          sliderEl.addEventListener('touchend', function (e) {
+            var d = tx - e.changedTouches[0].clientX;
+            if (Math.abs(d) > 40) goTo(current + (d > 0 ? 1 : -1));
+            resetTimer();
+          }, { passive: true });
+        }
+      }
+
+      function goTo(idx) {
+        if (!slides || !slides.length) return;
+        current = ((idx % slides.length) + slides.length) % slides.length;
+        track.style.transform = 'translateX(-' + (current * 100) + '%)';
+        var dots = document.querySelectorAll('.slider-dot');
+        dots.forEach(function (d, i) { d.classList.toggle('active', i === current); });
+      }
+
+      function resetTimer() {
+        clearInterval(autoTimer);
+        autoTimer = setInterval(function () { goTo(current + 1); }, 4000);
+      }
+
+      window.slideBanner = function (dir) { goTo(current + dir); resetTimer(); };
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+</body>
+
+</html>

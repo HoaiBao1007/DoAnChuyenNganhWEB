@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HyperBuy – Hồ Sơ Người Dùng</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Profile-specific styles only (not overriding global theme) */
+    main.container { margin-top: 30px; max-width: 900px; }
+
+    #user-profile {
+      background: var(--panel-bg);
+      border-radius: 16px;
+      padding: 30px 40px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 40px;
+    }
+    #user-profile h2 {
+      font-size: 1.5rem; font-weight: 600; color: var(--text-primary);
+      border-bottom: 3px solid #4f46e5; padding-bottom: 10px; margin-bottom: 25px;
+    }
+    #profile-info p { font-size: 1rem; margin: 10px 0; color: var(--text-secondary); }
+    #profile-info strong { color: var(--text-primary); width: 160px; display: inline-block; }
+
+    #profile-actions-buttons { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 15px; }
+    #profile-actions-buttons .btn { min-width: 180px; text-align: center; }
+    #profile-store-actions { margin-top: 18px; display: none; }
+    #profile-store-actions .btn { margin-right: 8px; margin-bottom: 8px; min-width: 180px; text-align: center; }
+
+    .profile-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .logout-icon-btn { background: none; border: none; cursor: pointer; font-size: 24px; color: #ef4444; }
+    .logout-icon-btn:hover { color: #dc2626; transform: scale(1.1); transition: 0.15s; }
+  </style>
+</head>
+
+<body>
+
+  <!-- Hidden dummy nav -->
+  <ul id="main-nav" style="display:none;">
+    <li><a href="index.html" id="nav-home">Home</a></li>
+    <li><a href="products.html" id="nav-products">Products</a></li>
+    <li id="nav-profile" style="display:none;"><a href="profile.html">Profile</a></li>
+    <li id="nav-admin-dashboard-li" style="display:none;"><a href="admin.html">Admin</a></li>
+    <li id="nav-my-orders" style="display:none;"><a href="my-orders.html">Orders</a>
+
+        <a href="wishlist.html" class="cp-action-item" style="position:relative;">
+          <i class="fas fa-heart"></i>
+          <div class="cp-action-text"><span>Yêu</span><span>thích</span></div>
+          <span class="wishlist-count-badge" style="position:absolute; top:-6px; right:-6px; background:#fff; color:#4f46e5; display:none; border-radius:10px; padding:2px 6px; font-weight:700; font-size:0.75rem;"></span>
+        </a></li>
+    <li id="nav-cart-link-li"><a href="cart.html">Cart<span class="cart-item-count-nav" style="display:none;"></span></a></li>
+    <li id="nav-login"><a href="login.html">Login</a></li>
+    <li id="nav-register"><a href="register.html">Register</a></li>
+    <li id="nav-logout" style="display:none;"><a href="#">Logout</a></li>
+    <li id="nav-notification-bell" style="display:none;"><a href="#" id="notification-bell-link"><i class="fas fa-bell"></i><span id="notification-count" class="notification-badge" style="display:none;"></span></a>
+      <div id="notification-dropdown" class="notification-list-dropdown" style="display:none;"><ul id="notification-list-items"></ul></div>
+    </li>
+  </ul>
+
+  <header class="cp-header">
+    <div class="cp-header-container">
+      <a href="index.html" class="cp-logo">HYPERBUY</a>
+      <form class="cp-search" action="products.html" method="GET" style="display:flex; position:relative; width:100%;">
+        <button type="submit" style="background:transparent; border:none; position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#666; cursor:pointer; padding:0; z-index:10;">
+          <i class="fas fa-search" style="position:static; transform:none;"></i>
+        </button>
+        <input type="text" name="name" placeholder="Bạn cần tìm gì hôm nay?" style="width:100%; padding:10px 15px 10px 40px; border-radius:10px; border:none; font-size:0.9rem; color:#333; box-shadow:inset 0 1px 3px rgba(0,0,0,0.1); outline:none;" />
+      </form>
+      <div class="cp-header-actions">
+        <a href="tel:19001234" class="cp-action-item" style="background:transparent;"><i class="fas fa-phone-volume"></i><div class="cp-action-text"><span>Gọi mua hàng</span><span>1900.1234</span></div></a>
+        <a href="my-orders.html" class="cp-action-item"><i class="fas fa-shipping-fast"></i><div class="cp-action-text"><span>Tra cứu</span><span>đơn hàng</span></div></a>
+        <a href="cart.html" class="cp-action-item" style="position:relative;"><i class="fas fa-shopping-bag"></i><div class="cp-action-text"><span>Giỏ</span><span>hàng</span></div></a>
+        <a href="login.html" class="cp-action-item" id="cp-auth-btn"><i class="fas fa-user-circle"></i><div class="cp-action-text"><span id="cp-auth-l1">Đăng</span><span id="cp-auth-l2">nhập</span></div></a>
+        <a href="admin.html" class="cp-action-item" id="cp-admin-back-btn" style="display:none;"><i class="fas fa-cogs"></i><div class="cp-action-text"><span>Quay về</span><span>Quản Trị</span></div></a>
+      </div>
+    </div>
+  </header>
+
+<main class="container">
+  <section id="user-profile">
+
+    <div id="profile-header" class="profile-header">
+      <h2>
+        <i class="fas fa-user-circle"></i> Thông tin cá nhân
+      </h2>
+      <button id="btn-logout-profile" type="button" class="logout-icon-btn" title="Đăng xuất">
+        <i class="fas fa-sign-out-alt"></i>
+      </button>
+    </div>
+
+      <div id="profile-loading" style="display:none;">
+        <p>Đang tải thông tin hồ sơ...</p>
+      </div>
+
+      <div id="profile-info" style="display:none;">
+        <p><strong>Tên đăng nhập:</strong> <span id="profile-username">N/A</span></p>
+        <p><strong>Họ và tên:</strong> <span id="profile-name">N/A</span></p>
+        <p><strong>Email:</strong> <span id="profile-email">N/A</span></p>
+        <p><strong>Ngày sinh:</strong> <span id="profile-dob">N/A</span></p>
+        <p><strong>Vai trò:</strong> <span id="profile-role">N/A</span></p>
+      </div>
+
+      <div id="profile-error" class="error-message" style="display:none;"></div>
+
+    <div id="profile-actions" style="margin-top: 25px;">
+      <div id="profile-actions-buttons">
+        <button id="openSellerRequestModalBtn" class="btn btn-primary" style="display:none;">
+          Đăng ký Bán hàng
+        </button>
+        <a href="my-ratings.html" id="btn-view-my-ratings" class="btn btn-secondary" style="background:#f97316; color:#fff;">
+          ⭐ Xem đánh giá của tôi
+        </a>
+      </div>
+        <a href="my-voucher.html" id="btn-my-vouchers" class="btn btn-secondary" style="background:#22c55e; color:#fff;">
+          🎁 Voucher của tôi
+        </a>
+
+      <p id="seller-status-message" style="margin-top: 10px; font-weight: 500;"></p>
+    </div>
+
+    <!-- KHU VỰC ACTION CỬA HÀNG CHO SELLER -->
+    <div id="profile-store-actions">
+      <button id="btn-view-my-store" class="btn btn-info">
+        Xem Cửa hàng Của Tôi
+      </button>
+      <button id="btn-add-product-my-store" class="btn btn-primary">
+        Thêm sản phẩm mới
+      </button>
+      <a href="seller-orders.html" id="btn-seller-manage-orders" class="btn btn-primary" style="background:#10b981;">
+        <i class="fas fa-box"></i> Quản lý đơn hàng cửa hàng
+      </a>
+      <a href="seller-revenue.html" id="btn-seller-revenue" class="btn btn-primary" style="background:#3b82f6;">
+        <i class="fas fa-chart-line"></i> Xem Doanh Thu
+      </a>
+
+      <div id="my-store-info-container" style="margin-top: 15px; display:none; background-color: var(--content-bg); padding:15px; border-radius: 10px;">
+        <h4>Thông tin Cửa hàng</h4>
+        <p><strong>Tên cửa hàng:</strong> <span id="my-store-name">N/A</span></p>
+        <p><strong>ID cửa hàng:</strong> <span id="my-store-id">N/A</span></p>
+        <p><strong>Giấy phép KD:</strong> <span id="my-store-license">N/A</span></p>
+        <div id="my-store-products-profile" class="modal-products-grid" style="margin-top:10px;"></div>
+      </div>
+    </div>
+
+    </section>
+  </main>
+
+  <!-- Modal: Đăng ký trở thành người bán -->
+  <div id="sellerRequestModal" class="modal">
+    <div class="modal-content">
+      <span id="closeSellerRequestModalBtn" class="close-button">&times;</span>
+      <h2>Đăng Ký Trở Thành Người Bán</h2>
+      <form id="sellerRequestForm">
+        <div class="form-group">
+          <label for="storeNameModalProfile">Tên cửa hàng mong muốn:</label>
+          <input type="text" id="storeNameModalProfile" name="storeName" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="businessLicenseModalProfile">Mã số GPKD (nếu có):</label>
+          <input type="text" id="businessLicenseModalProfile" name="businessLicense" class="form-control">
+        </div>
+        <div class="form-group" style="margin-top: 15px;">
+          <button type="submit" class="btn btn-primary">Gửi Yêu Cầu</button>
+        </div>
+        <p id="seller-request-message" style="display:none; margin-top:10px;"></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Thông tin cửa hàng -->
+  <div id="sellerInfoModal" class="modal">
+    <div class="modal-content" style="max-width: 800px; max-height: 80vh; overflow-y: auto;">
+      <span class="close-button" title="Đóng">&times;</span>
+      <h2>Thông Tin Cửa Hàng</h2>
+      <div id="seller-details-content">
+        <p><strong>Tên cửa hàng:</strong> <span id="modal-seller-store-name">N/A</span></p>
+        <p><strong>Chủ cửa hàng:</strong> <span id="modal-seller-owner-name">N/A</span></p>
+        <p><strong>Username:</strong> <span id="modal-seller-username">N/A</span></p>
+        <p><strong>Email liên hệ:</strong> <span id="modal-seller-email">N/A</span></p>
+        <p><strong>GPKD:</strong> <span id="modal-seller-license">N/A</span></p>
+      </div>
+      <hr>
+      <h4>Sản phẩm của Cửa hàng</h4>
+      <div id="modal-seller-products" class="modal-products-grid">
+        <p>Đang tải sản phẩm của cửa hàng...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer style="background: #fff; padding: 40px 0 20px; border-top: 1px solid #e5e7eb; color: #4b5563;">
+    <div style="width:100%; max-width:1200px; margin:0 auto; padding:0 10px; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px;">
+      <div>
+        <h4 style="font-size: 1.05rem; font-weight:700; color:#111; margin-bottom: 18px;">Tổng đài hỗ trợ miễn phí</h4>
+        <p style="font-size: 0.9rem; margin-bottom: 8px;">Gọi mua hàng: <strong style="color:#4f46e5;">1800.2097</strong> (7h30 - 22h00)</p>
+      </div>
+      <div>
+        <h4 style="font-size: 1.05rem; font-weight:700; color:#111; margin-bottom: 18px;">Thông tin và chính sách</h4>
+        <p style="font-size: 0.9rem; margin-bottom: 8px;"><a href="#" style="color:#4b5563; text-decoration:none;">Chính sách giao hàng</a></p>
+        <p style="font-size: 0.9rem; margin-bottom: 8px;"><a href="#" style="color:#4b5563; text-decoration:none;">Đổi trả & Bảo hành</a></p>
+      </div>
+      <div>
+        <h4 style="font-size: 1.05rem; font-weight:700; color:#111; margin-bottom: 18px;">Kết nối với HyperBuy</h4>
+        <div style="font-size: 1.8rem; display: flex; gap: 15px; color: #4f46e5;">
+          <a href="#" style="color:#4f46e5;"><i class="fab fa-facebook"></i></a>
+          <a href="#" style="color:#4f46e5;"><i class="fab fa-youtube"></i></a>
+          <a href="#" style="color:#4f46e5;"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+    </div>
+    <div style="text-align: center; margin-top: 40px; padding-top:20px; border-top:1px solid #eee; font-size: 0.85rem; color: #888;">
+      © <span id="current-year">2026</span> Công ty TNHH HyperBuy. Mọi quyền được bảo lưu.
+    </div>
+  </footer>
+
+<script src="js/main.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    if (!isLoggedIn()) {
+      alert("Bạn chưa đăng nhập!");
+      location.href = "login.html";
+      return;
+    }
+
+    // Auth UI header
+    const token = localStorage.getItem("authToken");
+    const cpAuthBtn = document.getElementById('cp-auth-btn');
+    const cpAuthL1 = document.getElementById('cp-auth-l1');
+    const cpAuthL2 = document.getElementById('cp-auth-l2');
+    if (token && cpAuthBtn) { cpAuthL1.innerText='Smember'; cpAuthL2.innerText='Tài khoản'; cpAuthBtn.href='profile.html'; }
+    try { const role=localStorage.getItem('userRole')||''; if(token&&(role==='ADMIN'||role==='admin')){const b=document.getElementById('cp-admin-back-btn'); if(b) b.style.display='flex';} } catch(e){}
+
+    const username = localStorage.getItem("username") || "";
+    const role = getUserRole();
+    const email = localStorage.getItem("email") || "";
+
+    document.getElementById("profile-username").textContent = username;
+    document.getElementById("profile-email").textContent = email;
+    document.getElementById("profile-role").textContent = role;
+
+    // Cho SELLER hiển thị khu cửa hàng
+    if (role === "SELLER") {
+      const storeActions = document.getElementById("profile-store-actions");
+      if (storeActions) storeActions.style.display = "block";
+    }
+
+    document.getElementById("current-year").textContent = new Date().getFullYear();
+
+    // Nút Đăng xuất trên navbar
+    const navLogout = document.getElementById("nav-logout");
+    if (navLogout) { navLogout.onclick = () => { handleLogout(); }; }
+
+    // Nút Đăng xuất trong profile (icon đỏ)
+    const btnLogoutProfile = document.getElementById("btn-logout-profile");
+    if (btnLogoutProfile) {
+      btnLogoutProfile.addEventListener("click", (e) => {
+        e.preventDefault();
+        handleLogout();
+      });
+    }
+  });
+</script>
+</body>
+</html>

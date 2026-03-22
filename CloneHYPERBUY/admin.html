@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HyperBuy - Quản trị</title>
+
+    <!-- CSS chung -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Font Awesome (icon sidebar) -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+          integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX5pBnMFcV7oQPJkl9QevSCWr3W6A=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+    <style>
+        /* Admin page local overrides - uses CSS variables for dark mode compatibility */
+
+        .admin-section {
+            background-color: var(--panel-bg);
+            padding: 25px;
+            margin-bottom: 30px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            display: none;
+        }
+        .admin-section.active {
+            display: block;
+        }
+
+        #admin-sub-nav {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+            list-style: none;
+            padding: 0;
+        }
+        #admin-sub-nav li {
+            display: inline-block;
+            margin: 0 5px;
+        }
+        #admin-sub-nav .admin-nav-link.active {
+            background-color: #4f46e5;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .admin-subsection {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px dashed var(--border-color);
+        }
+        .admin-subsection:first-of-type {
+            margin-top: 0;
+            padding-top: 0;
+            border-top: none;
+        }
+
+        h3 {
+            margin-top: 1.5em;
+            margin-bottom: 0.8em;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            text-align: left;
+        }
+        th {
+            background-color: var(--content-bg);
+            color: var(--text-primary);
+        }
+        .action-buttons button {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="admin-layout">
+    <!-- 🧭 Sidebar -->
+    <aside id="admin-sidebar">
+        <div class="sidebar-header">
+            <h2>⚡ HyperBuy</h2>
+            <button id="toggle-darkmode" title="Chuyển giao diện">🌙</button>
+        </div>
+
+        <ul id="admin-sub-nav" class="sidebar-nav">
+            <li>
+                <a href="#user-management"
+                   class="admin-nav-link active"
+                   data-section-id="user-management">
+                    <i class="fas fa-users"></i> Người dùng
+                </a>
+            </li>
+            <li>
+                <a href="#category-management"
+                   class="admin-nav-link"
+                   data-section-id="category-management">
+                    <i class="fas fa-list"></i> Danh mục
+                </a>
+            </li>
+            <li>
+                <a href="#notification-management"
+                   class="admin-nav-link"
+                   data-section-id="notification-management">
+                    <i class="fas fa-bell"></i> Thông báo
+                </a>
+            </li>
+            <li>
+                <a href="#voucher-management"
+                   class="admin-nav-link"
+                   data-section-id="voucher-management">
+                    <i class="fas fa-ticket-alt"></i> Voucher
+                </a>
+            </li> 
+    <!-- ✅ NEW: Quản lý đơn hàng -->
+    <li>
+        <a href="#order-management"
+           class="admin-nav-link"
+           data-section-id="order-management">
+            <i class="fas fa-receipt"></i> Đơn hàng
+        </a>
+    </li>
+            <!-- 🚫 Tài khoản bị cấm -->
+            <li>
+                <a href="#admin-banned-users-section"
+                   class="admin-nav-link"
+                   data-section-id="admin-banned-users-section">
+                    🚫 Tài khoản bị cấm
+                </a>
+            </li>
+        </ul>
+
+        <div class="sidebar-home">
+            <a href="index.html" class="btn-home">
+                <i class="fas fa-home"></i><span>Trang chủ</span>
+            </a>
+        </div>
+        <div class="sidebar-footer">
+            <button id="admin-logout-btn" class="btn btn-danger">
+                <i class="fas fa-sign-out-alt"></i> Đăng xuất
+            </button>
+        </div>
+    </aside>
+
+    <!-- 🧱 Main content -->
+    <main class="admin-main">
+        <header class="admin-header">
+            <h1>Bảng điều khiển Quản trị</h1>
+            <button id="sidebar-toggle" class="btn btn-secondary">
+                <i class="fas fa-bars"></i>
+            </button>
+        </header>
+
+        <!-- 👤 Quản lý người dùng -->
+        <section class="admin-section active" id="user-management">
+            <h2>Quản lý Người dùng</h2>
+
+            <div class="admin-subsection">
+                <h3>
+                    Yêu cầu trở thành Người bán
+                    (<span id="seller-request-count">0</span>)
+                </h3>
+                <div class="table-responsive">
+                    <table id="seller-requests-table">
+                        <thead>
+                        <tr>
+                            <th>ID Yêu cầu</th>
+                            <th>Tên User</th>
+                            <th>Tên Cửa Hàng</th>
+                            <th>Hành động</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td colspan="4" style="text-align:center;">Đang tải...</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="admin-subsection">
+                <h3>
+                    Danh sách Người dùng
+                    (<span id="all-user-count">0</span>)
+                </h3>
+                <div class="table-responsive">
+                    <table id="all-users-table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên</th>
+                            <th>Email</th>
+                            <th>Vai trò</th>
+                            <th>Hành động</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td colspan="5" style="text-align:center;">Đang tải...</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🏷️ Quản lý danh mục -->
+        <section class="admin-section" id="category-management">
+            <h2>Quản lý Danh mục</h2>
+
+            <button id="show-add-category-form" class="btn btn-primary">
+                + Thêm Danh mục
+            </button>
+
+            <div id="add-edit-category-form" style="display:none;">
+                <h3 id="category-form-title">Thêm Danh mục Mới</h3>
+                <input type="hidden" id="category-id" />
+
+                <div class="form-group">
+                    <label for="category-name">Tên Danh mục:</label>
+                    <input type="text" id="category-name" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="category-description">Mô tả:</label>
+                    <textarea id="category-description"></textarea>
+                </div>
+
+                <button id="save-category-button" class="btn btn-success">Lưu</button>
+                <button id="cancel-category-button" class="btn btn-secondary">Hủy</button>
+
+                <p id="category-message"></p>
+            </div>
+
+            <div class="table-responsive">
+                <table id="categories-table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tên</th>
+                        <th>Mô tả</th>
+                        <th>Hành động</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td colspan="4" style="text-align:center;">Đang tải...</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 🔔 Gửi thông báo -->
+        <section class="admin-section" id="notification-management">
+            <h2>Gửi Thông báo</h2>
+
+            <form id="adminSendNotificationForm">
+                <div class="form-group">
+                    <label>User ID (để trống nếu gửi cho tất cả):</label>
+                    <input type="text"
+                           id="admin-user-id"
+                           name="userId"
+                           placeholder="Nhập User ID hoặc để trống" />
+                </div>
+
+                <div class="form-group">
+                    <label>Nội dung thông báo:</label>
+                    <textarea id="admin-message"
+                              name="message"
+                              required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-info">
+                    Gửi Thông báo
+                </button>
+            </form>
+
+            <p id="send-notification-admin-success-message"
+               class="success-message" style="display:none;"></p>
+            <p id="send-notification-admin-error-message"
+               class="error-message" style="display:none;"></p>
+        </section>
+
+        <!-- 🎟️ Quản lý voucher -->
+        <section class="admin-section" id="voucher-management">
+            <h2>🎟️ Quản lý Voucher</h2>
+
+            <form id="createVoucherForm" class="form-container">
+                <div class="form-row">
+                    <div class="form-group form-group-half">
+                        <label>Mã Voucher:</label>
+                        <input name="code" required />
+                    </div>
+                    <div class="form-group form-group-half">
+                        <label>Giá trị giảm:</label>
+                        <input name="discountValue" type="number" step="0.01" required />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group form-group-half">
+                        <label>Loại giảm:</label>
+                        <select name="discountType">
+                            <option value="PERCENT">%</option>
+                            <option value="AMOUNT">₫</option>
+                        </select>
+                    </div>
+                    <div class="form-group form-group-half">
+                        <label>Số lượng:</label>
+                        <input name="quantity" type="number" min="1" value="1" />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group form-group-half">
+                        <label>Bắt đầu:</label>
+                        <input name="startDate" type="datetime-local" required />
+                    </div>
+                    <div class="form-group form-group-half">
+                        <label>Kết thúc:</label>
+                        <input name="endDate" type="datetime-local" required />
+                    </div>
+                </div>
+                  <div class="form-group">
+                    <label>Điểm cần để đổi (pointCost):</label>
+                    <input name="pointCost" type="number" min="0" value="0" />
+                </div>
+
+                <div class="form-group">
+                    <label>Trạng thái:</label>
+                    <select name="status">
+                        <option value="ACTIVE">ACTIVE</option>
+                        <option value="INACTIVE">INACTIVE</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Tạo Voucher</button>
+                <p id="voucher-success-message" class="success-message"></p>
+                <p id="voucher-error-message" class="error-message"></p>
+            </form>
+
+            <hr />
+
+            <form id="issueVoucherForm" class="form-container">
+                <div class="form-row">
+                    <div class="form-group form-group-half">
+                        <label>User ID / Seller ID:</label>
+                        <input name="userId" placeholder="Nhập ID người nhận..." required />
+                    </div>
+                    <div class="form-group form-group-half">
+                        <label>Mã Voucher:</label>
+                        <input name="voucherCode" placeholder="Nhập mã voucher..." required />
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-success">Gửi Voucher</button>
+                <p id="issue-success-message" class="success-message"></p>
+                <p id="issue-error-message" class="error-message"></p>
+            </form>
+        </section>
+<section id="order-management" class="admin-section d-none">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Quản lý Đơn hàng</h5>
+            <span>
+                Tổng số đơn hàng:
+                <strong id="admin-order-count">0</strong>
+            </span>
+        </div>
+
+        <div class="card-body">
+            <!-- Ô tìm kiếm theo username -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="admin-order-search-input" class="form-label">
+                        Tìm đơn hàng theo username
+                    </label>
+                    <div class="input-group">
+                        <input
+                            type="text"
+                            id="admin-order-search-input"
+                            class="form-control"
+                            placeholder="Ví dụ: bao1, user001 ..."
+                        />
+                        <button class="btn btn-primary" id="admin-order-search-btn">
+                            Tìm đơn
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hộp lỗi -->
+            <div id="admin-orders-error" class="alert alert-danger d-none"></div>
+
+            <!-- Bảng đơn hàng -->
+            <div class="table-responsive">
+                <table class="table table-striped" id="admin-orders-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Người dùng</th>
+                            <th>Tổng tiền</th>
+                            <th>Trạng thái</th>
+                            <th>Ngày tạo</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dữ liệu sẽ được admin.js đổ vào -->
+                        <tr>
+                            <td colspan="6">Hãy nhập username và bấm "Tìm đơn".</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+        <!-- 🚫 Tài khoản bị cấm -->
+        <section class="admin-section" id="admin-banned-users-section">
+            <h2>🚫 Tài khoản bị cấm</h2>
+
+            <p>
+                Tổng số tài khoản bị cấm:
+                <strong id="banned-user-count">0</strong>
+            </p>
+
+            <div class="table-responsive">
+                <table id="banned-users-table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tên đăng nhập</th>
+                        <th>Email</th>
+                        <th>Hành động</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td colspan="4" style="text-align:center;">Đang tải...</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</div>
+
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+<script src="js/main.js"></script>
+<script src="js/admin.js"></script>
+
+<script>
+    // 🌙 Dark mode toggle
+    document.body.style.transition = "background 0.3s, color 0.3s";
+    document.addEventListener("DOMContentLoaded", () => {
+        const body = document.body;
+        const toggleBtn = document.getElementById("toggle-darkmode");
+        const isDark = localStorage.getItem("darkMode") === "true";
+
+        if (isDark) body.classList.add("dark-mode");
+        toggleBtn.textContent = isDark ? "☀️" : "🌙";
+
+        toggleBtn.addEventListener("click", () => {
+            body.classList.toggle("dark-mode");
+            const active = body.classList.contains("dark-mode");
+            localStorage.setItem("darkMode", active);
+            toggleBtn.textContent = active ? "☀️" : "🌙";
+        });
+    });
+</script>
+</body>
+</html>
